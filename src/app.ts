@@ -3,6 +3,7 @@ import express, { type Application } from "express";
 import { auth } from "./lib/auth";
 import cors from "cors";
 import { categoryRoutes } from "./module/category/category.routes";
+import { medicineRoutes } from "./module/medicine/medicine.routes";
 
 const app: Application = express();
 
@@ -17,9 +18,11 @@ app.use(express.json());
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-// seller routes
+// admin routes
 app.use("/api", categoryRoutes);
-// app.use("/api/seller", medicineRoutes);
+
+// seller routes
+app.use("/api/seller", medicineRoutes);
 
 app.get("/", (req, res) => {
   res.send("Pharma Care");
