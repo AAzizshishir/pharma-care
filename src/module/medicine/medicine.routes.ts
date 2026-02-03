@@ -17,4 +17,11 @@ router.post(
   medicineController.addMedicine,
 );
 
+// update medicine
+router.put(
+  "/seller/medicine/:id",
+  auth(UserRole.SELLER),
+  medicineController.updateMedicine,
+);
+
 export const medicineRoutes: Router = router;

@@ -38,8 +38,33 @@ const addMedicine = async (
   return result;
 };
 
+// update medicine
+const updateMedicine = async (
+  medicineId: string,
+  sellerId: string,
+  payload: any,
+) => {
+  const medicineData = await prisma.medicine.findUniqueOrThrow({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  if (medicineData.sellerId !== sellerId) {
+    throw new Error("This Medicine is not yours");
+  }
+
+  const result = await prisma.medicine.update({
+    where: { id: medicineId },
+    data: payload,
+  });
+
+  return result;
+};
+
 export const medicineService = {
   addMedicine,
   getMedicines,
   getMedicineById,
+  updateMedicine,
 };
