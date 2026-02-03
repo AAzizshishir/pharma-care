@@ -22,7 +22,7 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use("/api", categoryRoutes);
 
 // Medicine Routes
-app.use("/api/seller", medicineRoutes);
+app.use("/api", medicineRoutes);
 
 app.get("/", (req, res) => {
   res.send("Pharma Care");

@@ -4,8 +4,15 @@ import { medicineController } from "./medicine.controller";
 
 const router = Router();
 
+// get medicines
+router.get("/medicines", medicineController.getMedicines);
+
+// get medicine by id
+router.get("/medicine/:id", medicineController.getMedicineById);
+
+// add medicine
 router.post(
-  "/medicines",
+  "/seller/medicines",
   auth(UserRole.SELLER),
   medicineController.addMedicine,
 );

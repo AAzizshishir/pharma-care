@@ -1,5 +1,23 @@
 import { prisma } from "../../lib/prisma";
 
+// get medicines
+const getMedicines = async () => {
+  const result = await prisma.medicine.findMany();
+  return result;
+};
+
+// get medicine by id
+const getMedicineById = async (medicineId: string) => {
+  const result = await prisma.medicine.findUnique({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  return result;
+};
+
+// add medicine
 const addMedicine = async (
   payload: {
     name: string;
@@ -22,4 +40,6 @@ const addMedicine = async (
 
 export const medicineService = {
   addMedicine,
+  getMedicines,
+  getMedicineById,
 };
