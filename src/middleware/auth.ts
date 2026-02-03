@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { auth as betterAuth } from "./../lib/auth";
+import type { UserStatus } from "../../generated/prisma/enums";
 
 export enum UserRole {
   CUSTOMER = "CUSTOMER",
@@ -15,6 +16,7 @@ declare global {
         email: string;
         name: string;
         role: string;
+        status: UserStatus;
         emailVerified: boolean;
       };
     }
@@ -39,6 +41,7 @@ const auth = (...roles: UserRole[]) => {
         email: session.user.email,
         name: session.user.name,
         role: session.user.role as string,
+        status: session.user.status as UserStatus,
         emailVerified: session.user.emailVerified,
       };
 

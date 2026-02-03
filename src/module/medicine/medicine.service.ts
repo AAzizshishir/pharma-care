@@ -1,8 +1,13 @@
+import { UserStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
 // get medicines
 const getMedicines = async () => {
-  const result = await prisma.medicine.findMany();
+  const result = await prisma.medicine.findMany({
+    where: {
+      seller: { status: UserStatus.ACTIVE },
+    },
+  });
   return result;
 };
 

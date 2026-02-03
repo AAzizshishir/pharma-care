@@ -6,4 +6,10 @@ const router = Router();
 
 router.get("/admin/users", auth(UserRole.ADMIN), userController.getUsers);
 
+router.put(
+  "/admin/user/:id",
+  auth(UserRole.ADMIN),
+  userController.updateUserStatus,
+);
+
 export const userRoutes: Router = router;

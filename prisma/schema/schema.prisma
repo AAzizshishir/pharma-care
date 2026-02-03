@@ -97,6 +97,12 @@ model Review {
 }
 
 // user table
+ enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  BANNED
+}
 
 model User {
   id            String    @id
@@ -106,12 +112,12 @@ model User {
   image         String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  role          String?   @default("CUSTOMER")
+  status        String?   @default("ACTIVE")
   sessions      Session[]
   accounts      Account[]
 
-  role String @default("CUSTOMER")
-
-  medicines     Medicine[]
+  medicinis     Medicine[]
   orders        Order[]
   reviews       Review[]
 
