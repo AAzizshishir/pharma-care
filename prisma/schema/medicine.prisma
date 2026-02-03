@@ -1,20 +1,2 @@
-model Medicine {
-  id          String   @id @default(uuid())
-  name        String   @db.VarChar(200)
-  description String   @db.Text
-  price       Decimal  @db.Decimal(10, 2)
-  stock       Int
-  sellerId    String
-  categoryId  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
 
-  seller      User     @relation(fields: [sellerId], references: [id])
-  category    Category @relation(fields: [categoryId], references: [id])
-  orderItems  OrderItem[]
-  reviews     Review[]
-
-  @@index([sellerId])
-  @@map("medicines")
-}
 

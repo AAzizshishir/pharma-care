@@ -1,14 +1,168 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../../generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// category table
+model Category {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  medicine    Medicine[]
+
+  @@map("categories")
+}
+
+// medicine table
+model Medicine {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(200)
+  description String   @db.Text
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int
+  sellerId    String
+  categoryId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  seller      User     @relation(fields: [sellerId], references: [id])
+  category    Category @relation(fields: [categoryId], references: [id])
+  orderItems  OrderItem[]
+  reviews     Review[]
+
+  @@index([sellerId])
+  @@map("medicine")
+}
+
+// order table
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id          String      @id @default(uuid())
+  customerId  String
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @db.Decimal(10,2)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  customer    User        @relation(fields: [customerId], references: [id])
+  orders      OrderItem[]
+
+  @@index([customerId])
+  @@map("orders")
+}
+
+// order item
+model OrderItem {
+  id             String    @id @default(uuid())
+  orderId        String
+  medicineId     String
+  quantity       Int
+  priceAtPurchase Decimal  @db.Decimal(10,2)
+
+  orders         Order    @relation(fields: [orderId], references: [id])
+  medicines      Medicine @relation(fields: [medicineId], references: [id])
+
+  @@map("orderItems")
+}
+
+// reviews
+model Review {
+  id         String   @id @default(uuid())
+  customerId String
+  medicineId String
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  customer   User     @relation(fields: [customerId], references: [id])
+  medicines  Medicine @relation(fields: [medicineId], references: [id])
+
+  @@index([customerId])
+  @@index([medicineId])
+  @@map("reviews")
+}
+
+// user table
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  role String @default("CUSTOMER")
+
+  medicines     Medicine[]
+  orders        Order[]
+  reviews       Review[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }
