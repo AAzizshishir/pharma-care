@@ -62,9 +62,29 @@ const updateMedicine = async (
   return result;
 };
 
+// Delete Medicine
+const deleteMedicine = async (medicineId: string, sellerId: string) => {
+  const medicineData = await prisma.medicine.findUniqueOrThrow({
+    where: {
+      id: medicineId,
+    },
+  });
+
+  if (medicineData.sellerId !== sellerId) {
+    throw new Error("This Medicine is not yours");
+  }
+
+  const result = await prisma.medicine.delete({
+    where: { id: medicineId },
+  });
+
+  return result;
+};
+
 export const medicineService = {
   addMedicine,
   getMedicines,
   getMedicineById,
   updateMedicine,
+  deleteMedicine,
 };

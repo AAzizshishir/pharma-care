@@ -24,4 +24,11 @@ router.put(
   medicineController.updateMedicine,
 );
 
+// delete medicine
+router.delete(
+  "/seller/medicine/:id",
+  auth(UserRole.SELLER),
+  medicineController.deleteMedicine,
+);
+
 export const medicineRoutes: Router = router;
