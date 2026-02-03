@@ -18,10 +18,10 @@ app.use(express.json());
 
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
-// admin routes
+// Category Routes
 app.use("/api", categoryRoutes);
 
-// seller routes
+// Medicine Routes
 app.use("/api/seller", medicineRoutes);
 
 app.get("/", (req, res) => {

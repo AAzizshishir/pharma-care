@@ -4,6 +4,10 @@ import { categoryController } from "./category.controller";
 
 const router = Router();
 
+// public routes
+router.get("/categories", categoryController.getCategories);
+
+// admin routes
 router.post("/category", auth(UserRole.ADMIN), categoryController.addCategory);
 
 export const categoryRoutes: Router = router;
