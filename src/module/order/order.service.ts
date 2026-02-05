@@ -95,8 +95,60 @@ const getUserOrderById = async (customerId: string, orderId: string) => {
   return result;
 };
 
+// get seller orders
+const getSellerOrders = async (sellerId: string) => {
+  const result = await prisma.orderItem.findMany({
+    where: {
+      medicines: {
+        sellerId,
+      },
+    },
+    include: {
+      orders: true,
+      medicines: true,
+    },
+  });
+
+  return result;
+};
+
+// update order status
+const updateOrderStatus = async (
+  orderId: string,
+  sellerId: string,
+  payload: { status: OrderStatus },
+) => {
+  console.log("From order service");
+  const orderData = await prisma.orderItem.findMany({
+    where: {
+      orderId,
+      medicines: {
+        sellerId,
+      },
+    },
+    include: {
+      medicines: true,
+    },
+  });
+
+  if (orderData.length === 0) {
+    throw new Error("This is not your order");
+  }
+
+  const result = await prisma.order.update({
+    where: {
+      id: orderId,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+
 export const orderService = {
   createOrder,
   getUserOrders,
   getUserOrderById,
+  getSellerOrders,
+  updateOrderStatus,
 };

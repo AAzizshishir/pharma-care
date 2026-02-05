@@ -45,6 +45,7 @@ model Medicine {
 // order table
 enum OrderStatus {
   PENDING
+  CONFIRMED
   SHIPPED
   DELIVERED
   CANCELLED
@@ -78,6 +79,8 @@ model OrderItem {
   orders         Order    @relation(fields: [orderId], references: [id])
   medicines      Medicine @relation(fields: [medicineId], references: [id])
 
+  @@index([orderId])
+  @@index([medicineId])
   @@map("orderItems")
 }
 

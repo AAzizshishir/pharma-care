@@ -49,8 +49,40 @@ const getUserOrderById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// get seller orders
+const getSellerOrders = catchAsync(async (req: Request, res: Response) => {
+  const sellerId = req.user?.id;
+  console.log(sellerId);
+  const result = await orderService.getSellerOrders(sellerId as string);
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Order Retrieved successfull",
+  });
+});
+
+const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
+  const orderId = req.params.id;
+  console.log(orderId);
+  const sellerId = req.user?.id;
+  const orderData = req.body;
+  console.log(orderData);
+  const result = await orderService.updateOrderStatus(
+    orderId as string,
+    sellerId as string,
+    orderData,
+  );
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Order status updated successfull",
+  });
+});
+
 export const orderController = {
   createOrder,
   getUserOrders,
   getUserOrderById,
+  getSellerOrders,
+  updateOrderStatus,
 };

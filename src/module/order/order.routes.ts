@@ -4,6 +4,13 @@ import auth, { UserRole } from "../../middleware/auth";
 
 const router = Router();
 
+// get seller orders
+router.get(
+  "/orders/seller",
+  auth(UserRole.SELLER),
+  orderController.getSellerOrders,
+);
+
 // get user orders
 router.get("/orders", auth(UserRole.CUSTOMER), orderController.getUserOrders);
 
@@ -12,6 +19,13 @@ router.get(
   "/order/:id",
   auth(UserRole.CUSTOMER),
   orderController.getUserOrderById,
+);
+
+// update order status
+router.patch(
+  "/order/seller/:id",
+  auth(UserRole.SELLER),
+  orderController.updateOrderStatus,
 );
 
 // create order
