@@ -6,6 +6,7 @@ import { categoryRoutes } from "./module/category/category.routes";
 import { medicineRoutes } from "./module/medicine/medicine.routes";
 import { errorHandler } from "./middleware/globalErrorHandler";
 import { userRoutes } from "./module/user/user.routes";
+import { orderRoutes } from "./module/order/order.routes";
 
 const app: Application = express();
 
@@ -25,6 +26,9 @@ app.use("/api", categoryRoutes);
 
 // Medicine Routes
 app.use("/api", medicineRoutes);
+
+// Order Routes
+app.use("/api", orderRoutes);
 
 // Admin Routes
 app.use("/api", userRoutes);
