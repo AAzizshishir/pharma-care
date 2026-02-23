@@ -7,6 +7,13 @@ const router = Router();
 // get medicines
 router.get("/medicines", medicineController.getMedicines);
 
+// get seller medicine
+router.get(
+  "/seller/medicines",
+  auth(UserRole.SELLER),
+  medicineController.getMedicineBySeller,
+);
+
 // get medicine by id
 router.get("/medicine/:id", medicineController.getMedicineById);
 

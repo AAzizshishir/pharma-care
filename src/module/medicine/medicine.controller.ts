@@ -12,6 +12,17 @@ const getMedicines = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// get medicine by seller
+const getMedicineBySeller = catchAsync(async (req: Request, res: Response) => {
+  const sellerId = req.user?.id;
+  const result = await medicineService.getMedicineBySeller(sellerId as string);
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Medicine retrieved successfull",
+  });
+});
+
 // get medicine by Id
 const getMedicineById = catchAsync(async (req: Request, res: Response) => {
   const medicineId = req.params.id;
@@ -71,6 +82,7 @@ const deleteMedicine = catchAsync(async (req: Request, res: Response) => {
 
 export const medicineController = {
   addMedicine,
+  getMedicineBySeller,
   getMedicines,
   getMedicineById,
   updateMedicine,
