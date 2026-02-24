@@ -51,6 +51,22 @@ const addToCart = async (
   });
 };
 
+// get cart data
+const getCart = async (userId: string) => {
+  const result = await prisma.cart.findUnique({
+    where: { userId: userId },
+    include: {
+      items: {
+        include: {
+          medicine: true,
+        },
+      },
+    },
+  });
+  return result;
+};
+
 export const cartService = {
   addToCart,
+  getCart,
 };
