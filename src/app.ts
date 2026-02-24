@@ -8,6 +8,7 @@ import { errorHandler } from "./middleware/globalErrorHandler";
 import { userRoutes } from "./module/user/user.routes";
 import { orderRoutes } from "./module/order/order.routes";
 import { reviewRoutes } from "./module/review/review.routes";
+import { cartRoutes } from "./module/cart/cart.routes";
 
 const app: Application = express();
 
@@ -36,6 +37,9 @@ app.use("/api", userRoutes);
 
 // review
 app.use("/api", reviewRoutes);
+
+// cart
+app.use("/api", cartRoutes);
 
 app.get("/", (req, res) => {
   res.send("Pharma Care");

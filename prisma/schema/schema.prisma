@@ -104,7 +104,7 @@ model Review {
 
 model Cart {
   id        String   @id @default(uuid())
-  userId    String
+  userId    String   @unique
   user      User     @relation(fields: [userId], references: [id])
   items     CartItem[]
   createdAt DateTime @default(now())
@@ -118,8 +118,8 @@ model CartItem {
   medicineId String
   medicine   Medicine @relation(fields: [medicineId], references: [id])
   quantity   Int      @default(1)
+  subtotal   Decimal  @db.Decimal(10, 2)
 }
-
 
 // user table
  enum UserStatus {
