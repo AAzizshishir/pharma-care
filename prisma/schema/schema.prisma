@@ -37,6 +37,7 @@ model Medicine {
   category    Category @relation(fields: [categoryId], references: [id])
   orderItems  OrderItem[]
   reviews     Review[]
+  cartItem    CartItem[]
 
   @@index([sellerId])
   @@map("medicine")
@@ -101,6 +102,25 @@ model Review {
   @@map("reviews")
 }
 
+model Cart {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CartItem {
+  id         String   @id @default(uuid())
+  cartId     String
+  cart       Cart     @relation(fields: [cartId], references: [id])
+  medicineId String
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+  quantity   Int      @default(1)
+}
+
+
 // user table
  enum UserStatus {
   ACTIVE
@@ -125,6 +145,7 @@ model User {
   medicinis     Medicine[]
   orders        Order[]
   reviews       Review[]
+  cart          Cart[]
 
   @@unique([email])
   @@map("user")
