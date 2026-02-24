@@ -2,6 +2,14 @@ import { prisma } from "../../lib/prisma";
 
 // add category --> admin can create
 const addCategory = async (payload: { name: string; description: string }) => {
+  const existing = await prisma.category.findUnique({
+    where: { name: payload.name },
+  });
+
+  if (existing) {
+    return { error: { message: "Category already exists" } };
+  }
+
   const result = await prisma.category.create({
     data: {
       ...payload,
