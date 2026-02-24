@@ -8,4 +8,10 @@ router.get("/cart", auth(UserRole.CUSTOMER), cartController.getCart);
 
 router.post("/cart/:id", auth(UserRole.CUSTOMER), cartController.addToCart);
 
+router.delete(
+  "/cart/:id",
+  auth(UserRole.CUSTOMER),
+  cartController.deleteCartItem,
+);
+
 export const cartRoutes: Router = router;

@@ -58,7 +58,9 @@ const getCart = async (userId: string) => {
     include: {
       items: {
         include: {
-          medicine: true,
+          medicine: {
+            include: { category: true },
+          },
         },
       },
     },
@@ -66,7 +68,25 @@ const getCart = async (userId: string) => {
   return result;
 };
 
+const deleteCartItem = async (cartItemId: string, userId: string) => {
+  const cartItem = await prisma.cartItem.findUniqueOrThrow({
+    where: { id: cartItemId },
+    include: { cart: true },
+  });
+
+  if (cartItem.cart.userId !== userId) {
+    throw new Error("This Cart is not yours");
+  }
+
+  const result = await prisma.cartItem.delete({
+    where: { id: cartItemId },
+  });
+
+  return result;
+};
+
 export const cartService = {
   addToCart,
   getCart,
+  deleteCartItem,
 };
