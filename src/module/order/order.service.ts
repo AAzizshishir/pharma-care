@@ -92,21 +92,17 @@ const getUserOrderById = async (customerId: string, orderId: string) => {
 
 // get seller orders
 const getSellerOrders = async (sellerId: string) => {
-  const result = await prisma.orderItem.findMany({
+  return prisma.order.findMany({
     where: {
-      medicines: {
-        sellerId,
+      orderItems: {
+        some: { medicines: { sellerId } },
       },
     },
     include: {
-      orders: {
-        include: { customer: true },
-      },
-      medicines: true,
+      customer: true,
+      orderItems: { include: { medicines: true } },
     },
   });
-
-  return result;
 };
 
 // update order status
