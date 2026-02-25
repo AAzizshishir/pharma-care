@@ -99,7 +99,9 @@ const getSellerOrders = async (sellerId: string) => {
       },
     },
     include: {
-      orders: true,
+      orders: {
+        include: { customer: true },
+      },
       medicines: true,
     },
   });
