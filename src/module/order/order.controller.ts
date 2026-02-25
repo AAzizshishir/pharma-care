@@ -7,12 +7,12 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
   if (!customerId) {
     throw new Error("Customer ID is required");
   }
-  const { payload, shippingAddress } = req.body;
+  const { items, shippingAddress } = req.body;
   console.log(customerId, req.body);
   const result = await orderService.createOrder({
     customerId,
     shippingAddress,
-    payload,
+    items,
   });
   res.status(201).json({
     success: true,

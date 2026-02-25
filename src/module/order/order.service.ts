@@ -9,58 +9,53 @@ interface OrderItemInput {
 interface CreateOrderDTO {
   customerId: string;
   shippingAddress: string;
-  payload: OrderItemInput[];
+  items: OrderItemInput[];
 }
 
 const createOrder = async ({
   customerId,
   shippingAddress,
-  payload,
+  items,
 }: CreateOrderDTO) => {
   let totalAmount = 0;
-  const orderItemsData = [];
+  const orderItemsData: any[] = [];
 
-  for (const data of payload) {
-    const medicine = await prisma.medicine.findUnique({
-      where: {
-        id: data.medicineId,
-      },
-    });
-    if (!medicine) {
-      throw new Error(`Medicine ${data.medicineId} not found`);
+  const result = await prisma.$transaction(async (tx) => {
+    for (const data of items) {
+      const medicine = await tx.medicine.findUnique({
+        where: { id: data.medicineId },
+      });
+      if (!medicine) throw new Error(`Medicine ${data.medicineId} not found`);
+      if (medicine.stock < data.quantity)
+        throw new Error(`Not enough stock for ${medicine.name}`);
+
+      const subtotal = Number(medicine.price) * data.quantity;
+      totalAmount += subtotal;
+
+      orderItemsData.push({
+        medicineId: data.medicineId,
+        quantity: data.quantity,
+        priceAtPurchase: medicine.price,
+      });
+
+      await tx.medicine.update({
+        where: { id: data.medicineId },
+        data: { stock: { decrement: data.quantity } },
+      });
     }
 
-    if (medicine.stock < data.quantity) {
-      throw new Error(`Not enough stock for ${medicine.name}`);
-    }
-    const priceAtPurchase = medicine.price.mul(data.quantity);
-    totalAmount += Number(priceAtPurchase);
-
-    orderItemsData.push({
-      medicineId: data.medicineId,
-      quantity: data.quantity,
-      priceAtPurchase: medicine.price,
+    return tx.order.create({
+      data: {
+        customerId,
+        status: OrderStatus.PENDING,
+        shippingAddress,
+        totalAmount,
+        orderItems: { create: orderItemsData },
+      },
+      include: { orderItems: { include: { medicines: true } } },
     });
-  }
-
-  const result = await prisma.order.create({
-    data: {
-      customerId,
-      status: OrderStatus.PENDING,
-      shippingAddress,
-      totalAmount: totalAmount,
-      orderItems: {
-        create: orderItemsData,
-      },
-    },
-    include: {
-      orderItems: {
-        include: {
-          medicines: true,
-        },
-      },
-    },
   });
+
   return result;
 };
 
