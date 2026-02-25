@@ -63,10 +63,8 @@ const getSellerOrders = catchAsync(async (req: Request, res: Response) => {
 
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const orderId = req.params.id;
-  console.log(orderId);
   const sellerId = req.user?.id;
   const orderData = req.body;
-  console.log(orderData);
   const result = await orderService.updateOrderStatus(
     orderId as string,
     sellerId as string,
@@ -79,10 +77,22 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const cancellOrder = catchAsync(async (req: Request, res: Response) => {
+  const orderId = req.params.id;
+  const orderData = req.body;
+  const result = await orderService.cancellOrder(orderId as string, orderData);
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Order cancell successfull",
+  });
+});
+
 export const orderController = {
   createOrder,
   getUserOrders,
   getUserOrderById,
   getSellerOrders,
   updateOrderStatus,
+  cancellOrder,
 };

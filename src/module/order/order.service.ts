@@ -122,7 +122,6 @@ const updateOrderStatus = async (
   sellerId: string,
   payload: { status: OrderStatus },
 ) => {
-  console.log("From order service");
   const orderData = await prisma.orderItem.findMany({
     where: {
       orderId,
@@ -149,10 +148,26 @@ const updateOrderStatus = async (
   return result;
 };
 
+// customer cancelled order
+const cancellOrder = async (
+  orderId: string,
+  payload: { status: OrderStatus },
+) => {
+  const result = await prisma.order.update({
+    where: {
+      id: orderId,
+    },
+    data: payload,
+  });
+
+  return result;
+};
+
 export const orderService = {
   createOrder,
   getUserOrders,
   getUserOrderById,
   getSellerOrders,
   updateOrderStatus,
+  cancellOrder,
 };

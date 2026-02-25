@@ -28,6 +28,9 @@ router.patch(
   orderController.updateOrderStatus,
 );
 
+// customer cancell order
+router.patch("/order/:id", orderController.cancellOrder);
+
 // create order
 router.post("/order", auth(UserRole.CUSTOMER), orderController.createOrder);
 
