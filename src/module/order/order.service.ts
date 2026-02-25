@@ -44,7 +44,7 @@ const createOrder = async ({
       });
     }
 
-    return tx.order.create({
+    const order = await tx.order.create({
       data: {
         customerId,
         status: OrderStatus.PENDING,
@@ -54,6 +54,17 @@ const createOrder = async ({
       },
       include: { orderItems: { include: { medicines: true } } },
     });
+
+    // clear cart after placed order
+    await tx.cartItem.deleteMany({
+      where: { cart: { userId: customerId } },
+    });
+
+    await tx.cart.deleteMany({
+      where: { userId: customerId },
+    });
+
+    return order;
   });
 
   return result;
