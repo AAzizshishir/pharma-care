@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { auth as betterAuth } from "./../lib/auth";
-import type { UserStatus } from "../../generated/prisma/enums";
+import type { UserStatus } from "../generated/prisma/enums";
 
 export enum UserRole {
   CUSTOMER = "CUSTOMER",

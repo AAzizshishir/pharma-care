@@ -1,0 +1,61 @@
+import catchAsync from "../../middleware/catchAsync";
+import { reviewService } from "./review.service";
+const addReview = catchAsync(async (req, res) => {
+    const customerId = req.user?.id;
+    const payload = req.body;
+    const result = await reviewService.addReview(customerId, payload);
+    res.status(201).json({
+        success: true,
+        data: result,
+        message: "review added successful",
+    });
+});
+// get customer reviews
+const getCustomerReview = catchAsync(async (req, res) => {
+    const customerId = req.user?.id;
+    const result = await reviewService.getCustomerReview(customerId);
+    res.status(200).json({
+        success: true,
+        data: result,
+        message: "review fetched successful",
+    });
+});
+// Get Medicine Reviews
+const getMedicineReviews = catchAsync(async (req, res) => {
+    const medicineId = req.params.id;
+    console.log("from controller", medicineId);
+    const result = await reviewService.getMedicineReviews(medicineId);
+    res.status(200).json({
+        success: true,
+        data: result,
+        message: "review fetched successful",
+    });
+});
+// Get Seller Reviews
+const getSellerMedicineReviews = catchAsync(async (req, res) => {
+    const sellerId = req.user?.id;
+    const result = await reviewService.getSellerMedicineReviews(sellerId);
+    res.status(200).json({
+        success: true,
+        data: result,
+        message: "review fetched successful",
+    });
+});
+const deleteReview = catchAsync(async (req, res) => {
+    const customerId = req.user?.id;
+    const reviewId = req.params.id;
+    const result = await reviewService.deleteReview(customerId, reviewId);
+    res.status(200).json({
+        success: true,
+        data: result,
+        message: "Review delete successfull",
+    });
+});
+export const reviewController = {
+    addReview,
+    getCustomerReview,
+    getMedicineReviews,
+    getSellerMedicineReviews,
+    deleteReview,
+};
+//# sourceMappingURL=review.controller.js.map
