@@ -16,6 +16,13 @@ router.get(
 // get for medicine
 router.get("/review/:id", reviewController.getMedicineReviews);
 
+// get for medicine
+router.get(
+  "/seller/review",
+  auth(UserRole.SELLER),
+  reviewController.getSellerMedicineReviews,
+);
+
 router.delete(
   "/review/:id",
   auth(UserRole.CUSTOMER),

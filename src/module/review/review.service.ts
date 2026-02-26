@@ -66,10 +66,46 @@ const getCustomerReview = async (customerId: string) => {
   return reviews;
 };
 
+// get medicine review
 const getMedicineReviews = async (medicineId: string) => {
   console.log("from review service", medicineId);
   const result = await prisma.review.findMany({
     where: { medicineId },
+    include: {
+      medicines: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      order: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return result;
+};
+
+// get seller medicine review
+
+const getSellerMedicineReviews = async (sellerId: string) => {
+  const result = await prisma.review.findMany({
+    where: { medicines: { sellerId } },
     include: {
       medicines: {
         select: {
@@ -122,5 +158,6 @@ export const reviewService = {
   addReview,
   getCustomerReview,
   getMedicineReviews,
+  getSellerMedicineReviews,
   deleteReview,
 };
