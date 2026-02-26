@@ -13,6 +13,29 @@ const addReview = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// get customer reviews
+const getCustomerReview = catchAsync(async (req: Request, res: Response) => {
+  const customerId = req.user?.id;
+  const result = await reviewService.getCustomerReview(customerId as string);
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "review fetched successful",
+  });
+});
+
+// Get Medicine Reviews
+const getMedicineReviews = catchAsync(async (req: Request, res: Response) => {
+  const medicineId = req.params.id;
+  console.log("from controller", medicineId);
+  const result = await reviewService.getMedicineReviews(medicineId as string);
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "review fetched successful",
+  });
+});
+
 const deleteReview = catchAsync(async (req: Request, res: Response) => {
   const customerId = req.user?.id;
   const reviewId = req.params.id;
@@ -29,5 +52,7 @@ const deleteReview = catchAsync(async (req: Request, res: Response) => {
 
 export const reviewController = {
   addReview,
+  getCustomerReview,
+  getMedicineReviews,
   deleteReview,
 };

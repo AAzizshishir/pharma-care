@@ -33,6 +33,73 @@ const addReview = async (customerId: string, payload: ReviewData) => {
   return result;
 };
 
+const getCustomerReview = async (customerId: string) => {
+  const reviews = await prisma.review.findMany({
+    where: { customerId },
+    include: {
+      medicines: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      order: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return reviews;
+};
+
+const getMedicineReviews = async (medicineId: string) => {
+  console.log("from review service", medicineId);
+  const result = await prisma.review.findMany({
+    where: { medicineId },
+    include: {
+      medicines: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+      order: {
+        select: {
+          id: true,
+          status: true,
+          createdAt: true,
+        },
+      },
+      customer: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return result;
+};
+
 // delete review
 const deleteReview = async (customerId: string, reviewId: string) => {
   const findReview = await prisma.review.findFirstOrThrow({
@@ -53,5 +120,7 @@ const deleteReview = async (customerId: string, reviewId: string) => {
 
 export const reviewService = {
   addReview,
+  getCustomerReview,
+  getMedicineReviews,
   deleteReview,
 };
