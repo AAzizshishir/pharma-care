@@ -85,6 +85,17 @@ const getUserOrders = async (customerId: string) => {
   return result;
 };
 
+// get all orders for admin
+const getOrdersForAdmin = async () => {
+  const result = prisma.order.findMany({
+    include: {
+      customer: true,
+      orderItems: { include: { medicines: true } },
+    },
+  });
+  return result;
+};
+
 // get user order by id
 const getUserOrderById = async (customerId: string, orderId: string) => {
   const result = await prisma.order.findUnique({
@@ -168,6 +179,7 @@ export const orderService = {
   getUserOrders,
   getUserOrderById,
   getSellerOrders,
+  getOrdersForAdmin,
   updateOrderStatus,
   cancellOrder,
 };

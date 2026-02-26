@@ -4,6 +4,9 @@ import auth, { UserRole } from "../../middleware/auth";
 
 const router = Router();
 
+// get all order --> only for admin
+router.get("/orders/admin", orderController.getOrdersForAdmin);
+
 // get seller orders
 router.get(
   "/orders/seller",

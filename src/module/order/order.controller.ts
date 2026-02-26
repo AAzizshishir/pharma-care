@@ -61,6 +61,16 @@ const getSellerOrders = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// get orders for admin
+const getOrdersForAdmin = catchAsync(async (req: Request, res: Response) => {
+  const result = await orderService.getOrdersForAdmin();
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Orders Retrieved successfull",
+  });
+});
+
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const orderId = req.params.id;
   const sellerId = req.user?.id;
@@ -93,6 +103,7 @@ export const orderController = {
   getUserOrders,
   getUserOrderById,
   getSellerOrders,
+  getOrdersForAdmin,
   updateOrderStatus,
   cancellOrder,
 };
