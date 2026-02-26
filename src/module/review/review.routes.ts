@@ -4,7 +4,7 @@ import { reviewController } from "./review.controller";
 
 const router = Router();
 
-router.post("/review/:id", auth(UserRole.CUSTOMER), reviewController.addReview);
+router.post("/review", auth(UserRole.CUSTOMER), reviewController.addReview);
 
 router.delete(
   "/review/:id",

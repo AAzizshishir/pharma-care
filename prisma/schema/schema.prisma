@@ -62,8 +62,9 @@ model Order {
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
-  customer    User        @relation(fields: [customerId], references: [id])
-  orderItems  OrderItem[]
+  customer        User        @relation(fields: [customerId], references: [id])
+  orderItems      OrderItem[]
+  reviews         Review[]
 
   @@index([customerId])
   @@map("orders")
@@ -90,12 +91,15 @@ model Review {
   id         String   @id @default(uuid())
   customerId String
   medicineId String
+  orderId    String
   rating     Int
   comment    String?
   createdAt  DateTime @default(now())
 
   customer   User     @relation(fields: [customerId], references: [id])
   medicines  Medicine @relation(fields: [medicineId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id])
+
 
   @@index([customerId])
   @@index([medicineId])

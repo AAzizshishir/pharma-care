@@ -4,13 +4,8 @@ import { reviewService } from "./review.service";
 
 const addReview = catchAsync(async (req: Request, res: Response) => {
   const customerId = req.user?.id;
-  const medicineId = req.params.id;
-  const reviewData = req.body;
-  const result = await reviewService.addReview(
-    reviewData,
-    medicineId as string,
-    customerId as string,
-  );
+  const payload = req.body;
+  const result = await reviewService.addReview(customerId as string, payload);
   res.status(201).json({
     success: true,
     data: result,

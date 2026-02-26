@@ -1,20 +1,32 @@
 import { prisma } from "../../lib/prisma";
 
 interface ReviewData {
+  medicineId: string;
+  orderId: string;
   rating: number;
   comment: string;
 }
 
-const addReview = async (
-  payload: ReviewData,
-  medicineId: string,
-  customerId: string,
-) => {
+const addReview = async (customerId: string, payload: ReviewData) => {
+  const order = await prisma.order.findUnique({
+    where: { id: payload.orderId },
+    include: { orderItems: true },
+  });
+  if (order?.customerId !== customerId || order.status !== "DELIVERED") {
+    throw new Error("Invalid order for review");
+  }
+
+  const medicineInOrder = order.orderItems.find(
+    (item) => item.medicineId === payload.medicineId,
+  );
+  if (!medicineInOrder) {
+    throw new Error("Medicine not found in order");
+  }
+
   const result = await prisma.review.create({
     data: {
-      ...payload,
-      medicineId,
       customerId,
+      ...payload,
     },
   });
 
