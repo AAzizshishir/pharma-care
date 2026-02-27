@@ -24,4 +24,11 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  cookies: {
+    cookieOptions: {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "none",
+    },
+  },
 });
