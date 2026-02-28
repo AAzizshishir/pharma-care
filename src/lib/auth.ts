@@ -25,10 +25,8 @@ export const auth = betterAuth({
     enabled: true,
   },
   cookies: {
-    cookieOptions: {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    },
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
   },
 });
