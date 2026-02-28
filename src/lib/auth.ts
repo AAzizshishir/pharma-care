@@ -25,14 +25,8 @@ export const auth = betterAuth({
     enabled: true,
   },
   cookie: {
-    sessionToken: {
-      name: `__Secure-better-auth.session_token`,
-    },
-    options: {
-      httpOnly: true,
-      sameSite: "lax",
-      path: "/",
-      secure: process.env.NODE_ENV === "production",
-    },
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
   },
 });
