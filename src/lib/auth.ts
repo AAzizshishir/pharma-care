@@ -29,4 +29,9 @@ export const auth = betterAuth({
     secure: true,
     sameSite: "none",
   },
+  session: {
+    cookieCache: {
+      enabled: true,
+    },
+  },
 });
