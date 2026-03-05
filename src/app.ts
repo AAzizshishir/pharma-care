@@ -12,13 +12,43 @@ import { cartRoutes } from "./module/cart/cart.routes";
 
 const app: Application = express();
 
-app.set("trust proxy", 1);
+const allowedOrigins = [
+  process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
+].filter(Boolean); // Remove undefined values
+
+// app.set("trust proxy", 1);
+
+// app.use(
+//   cors({
+//     origin:
+//       process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
+//     credentials: true,
+//   }),
+// );
 
 app.use(
   cors({
-    origin:
-      process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (mobile apps, Postman, etc.)
+      if (!origin) return callback(null, true);
+
+      // Check if origin is in allowedOrigins or matches Vercel preview pattern
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/next-blog-client.*\.vercel\.app$/.test(origin) ||
+        /^https:\/\/.*\.vercel\.app$/.test(origin) || // Any Vercel deployment
+        /^https:\/\/.*\.onrender\.com$/.test(origin); // Any Render deployment
+
+      if (isAllowed) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
+    exposedHeaders: ["Set-Cookie"],
   }),
 );
 
