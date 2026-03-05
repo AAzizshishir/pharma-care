@@ -16,16 +16,6 @@ const allowedOrigins = [
   process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
 ].filter(Boolean); // Remove undefined values
 
-// app.set("trust proxy", 1);
-
-// app.use(
-//   cors({
-//     origin:
-//       process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
-//     credentials: true,
-//   }),
-// );
-
 app.use(
   cors({
     origin: (origin, callback) => {
