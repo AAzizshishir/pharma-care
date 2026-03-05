@@ -29,7 +29,9 @@ const auth = (...roles: UserRole[]) => {
       const session = await betterAuth.api.getSession({
         headers: req.headers as any,
       });
-
+      console.log("session", session);
+      console.log("cookies: from auth middleware", req.headers.cookie);
+      console.log("headers: from auth middleware", req.headers);
       if (!session) {
         return res.status(401).json({
           success: false,
