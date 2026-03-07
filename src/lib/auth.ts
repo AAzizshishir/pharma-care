@@ -44,12 +44,14 @@ export const auth = betterAuth({
       attributes: {
         sameSite: "none",
         secure: true,
+        httpOnly: true,
       },
     },
     sessionData: {
       attributes: {
         sameSite: "none",
         secure: true,
+        httpOnly: true,
       },
     },
   },
