@@ -47,6 +47,7 @@ export const auth = betterAuth({
         secure: true,
         httpOnly: true,
         path: "/",
+        domain: "pharma-care-1.onrender.com",
       },
     },
     sessionData: {
@@ -55,6 +56,7 @@ export const auth = betterAuth({
         secure: true,
         httpOnly: true,
         path: "/",
+        domain: "pharma-care-1.onrender.com",
       },
     },
   },
