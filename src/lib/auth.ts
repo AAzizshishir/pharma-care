@@ -46,5 +46,11 @@ export const auth = betterAuth({
         secure: true,
       },
     },
+    sessionData: {
+      attributes: {
+        sameSite: "none",
+        secure: true,
+      },
+    },
   },
 });
