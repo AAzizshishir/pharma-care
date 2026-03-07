@@ -8,6 +8,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   trustedOrigins: [process.env.APP_URL!, process.env.BETTER_AUTH_URL!],
+
   user: {
     additionalFields: {
       role: {
@@ -47,7 +48,6 @@ export const auth = betterAuth({
         secure: true,
         httpOnly: true,
         path: "/",
-        domain: "pharma-care-1.onrender.com",
       },
     },
     sessionData: {
@@ -56,8 +56,10 @@ export const auth = betterAuth({
         secure: true,
         httpOnly: true,
         path: "/",
-        domain: "pharma-care-1.onrender.com",
       },
     },
+  },
+  cookie: {
+    domain: process.env.COOKIE_DOMAIN,
   },
 });
