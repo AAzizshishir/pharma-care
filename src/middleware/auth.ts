@@ -26,9 +26,15 @@ declare global {
 const auth = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
+      console.log("🔍 Auth Middleware - Cookie Header:", req.headers.cookie);
+      console.log("🔍 All Headers:", req.headers);
+
       const session = await betterAuth.api.getSession({
         headers: req.headers as any,
       });
+
+      console.log("🔍 Session Result:", session);
+
       if (!session) {
         return res.status(401).json({
           success: false,
