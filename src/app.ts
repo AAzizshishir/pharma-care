@@ -13,8 +13,8 @@ import { cartRoutes } from "./module/cart/cart.routes";
 const app: Application = express();
 
 const allowedOrigins = [
-  process.env.LOCAL_APP_UR || "http://localhost:3000",
-  process.env.APP_URL || "https://pharmacare-frontend-d8dh.onrender.com",
+  process.env.LOCAL_APP_URL || "http://localhost:3000",
+  process.env.APP_URL || "https://pharmacare-frontend-omega.vercel.app",
 ].filter(Boolean); // Remove undefined values
 
 app.use(
