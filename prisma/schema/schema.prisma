@@ -27,9 +27,11 @@ model Category {
 model Medicine {
   id          String   @id @default(uuid())
   name        String   @db.VarChar(200)
+  brandName   String   @db.VarChar(100)
   description String   @db.Text
   price       Decimal  @db.Decimal(10, 2)
   stock       Int
+  imageUrl    String  @db.VarChar(500)
   sellerId    String
   categoryId  String
   createdAt   DateTime @default(now())
