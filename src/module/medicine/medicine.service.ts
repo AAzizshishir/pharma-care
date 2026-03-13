@@ -1,14 +1,67 @@
+import type { Prisma } from "../../generated/prisma/client";
 import { UserStatus } from "../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 
+type QueryParams = {
+  //reserved word
+  searchTerm?: string;
+  page?: string;
+  limit?: string;
+  fields?: string; // ?fields=id,name,user
+
+  // filterable fields
+  category?: string;
+  brandName?: string;
+
+  [key: string]: unknown;
+};
+
 // get medicines
-const getMedicines = async () => {
-  const result = await prisma.medicine.findMany({
-    where: {
-      seller: { status: UserStatus.ACTIVE },
-    },
+const getMedicines = async (query: QueryParams) => {
+  console.log(query);
+  // step 1: pagination
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const where: Prisma.MedicineWhereInput = {
+    seller: { status: UserStatus.ACTIVE },
+  };
+
+  // step 2: Searching with Name
+  if (query.searchTerm) {
+    where.name = {
+      contains: query.searchTerm,
+      mode: "insensitive",
+    };
+  }
+
+  // step 3: filter with Brand Name
+  if (query.brandName) {
+    where.brandName = query.brandName;
+  }
+
+  // step 4: filter with Category Name
+  if (query.category) {
+    where.categoryId = query.category;
+  }
+
+  const total = await prisma.medicine.count({ where });
+
+  const medicines = await prisma.medicine.findMany({
+    where,
+    skip,
+    take: limit,
   });
-  return result;
+  return {
+    data: medicines,
+    meta: {
+      page,
+      limit,
+      total,
+      totalPages: Number(Math.ceil(total / limit)),
+    },
+  };
 };
 
 // get medicine by seller
@@ -37,9 +90,11 @@ const getMedicineById = async (medicineId: string) => {
 const addMedicine = async (
   payload: {
     name: string;
+    brandName: string;
     description: string;
     price: number;
     stock: number;
+    imageUrl: string;
     categoryId: string;
   },
   sellerId: string,

@@ -29,6 +29,10 @@ model Medicine {
   name        String   @db.VarChar(200)
   brandName   String   @db.VarChar(100)
   description String   @db.Text
+  // benefits    String?  for future use
+  // commonUsage String?  
+  // dosage      String?  
+  // safetyNotes String?  
   price       Decimal  @db.Decimal(10, 2)
   stock       Int
   imageUrl    String  @db.VarChar(500)

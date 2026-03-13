@@ -4,7 +4,8 @@ import { medicineService } from "./medicine.service";
 
 // get medicines
 const getMedicines = catchAsync(async (req: Request, res: Response) => {
-  const result = await medicineService.getMedicines();
+  const query = req.query;
+  const result = await medicineService.getMedicines(query);
   res.status(200).json({
     success: true,
     data: result,
