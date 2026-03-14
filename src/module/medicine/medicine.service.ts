@@ -10,7 +10,7 @@ type QueryParams = {
   fields?: string; // ?fields=id,name,user
 
   // filterable fields
-  category?: string;
+  categoryName?: string;
   brandName?: string;
 
   [key: string]: unknown;
@@ -43,7 +43,7 @@ const getMedicines = async (query: QueryParams) => {
 
   // step 4: filter with Category Name
   if (query.category) {
-    where.categoryId = query.category;
+    where.category = { name: query.category };
   }
 
   const total = await prisma.medicine.count({ where });
