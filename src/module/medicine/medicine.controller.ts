@@ -13,6 +13,15 @@ const getMedicines = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getTopRatedMedicines = catchAsync(async (req, res) => {
+  const result = await medicineService.getTopRatedMedicines();
+  res.status(200).json({
+    success: true,
+    data: result,
+    message: "Top Rated Medicines retrieved successfull",
+  });
+});
+
 // get medicine by seller
 const getMedicineBySeller = catchAsync(async (req: Request, res: Response) => {
   const sellerId = req.user?.id;
@@ -87,6 +96,7 @@ export const medicineController = {
   addMedicine,
   getMedicineBySeller,
   getMedicines,
+  getTopRatedMedicines,
   getMedicineById,
   updateMedicine,
   deleteMedicine,

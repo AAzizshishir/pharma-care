@@ -64,6 +64,34 @@ const getMedicines = async (query: QueryParams) => {
   };
 };
 
+// get Top Rated Medicines
+const getTopRatedMedicines = async () => {
+  const medicineWithRating = await prisma.review.groupBy({
+    by: ["medicineId"],
+    _avg: { rating: true },
+    orderBy: { _avg: { rating: "desc" } },
+    take: 6,
+  });
+
+  console.log(medicineWithRating, "average ratings");
+
+  const medicines = await prisma.medicine.findMany({
+    where: { id: { in: medicineWithRating.map((m) => m.medicineId) } },
+  });
+
+  console.log(medicines, "review with medicine details");
+
+  const result = medicines.map((med) => {
+    const ratingInfo = medicineWithRating.find((r) => r.medicineId === med.id);
+    return {
+      ...med,
+      averageRating: ratingInfo?._avg.rating ?? 0,
+    };
+  });
+  console.log(result, "medicine with average rating");
+  return result;
+};
+
 // get medicine by seller
 const getMedicineBySeller = async (sellerId: string) => {
   const result = await prisma.medicine.findMany({
@@ -154,6 +182,7 @@ const deleteMedicine = async (medicineId: string, sellerId: string) => {
 
 export const medicineService = {
   addMedicine,
+  getTopRatedMedicines,
   getMedicineBySeller,
   getMedicines,
   getMedicineById,

@@ -7,6 +7,9 @@ const router = Router();
 // get medicines
 router.get("/medicines", medicineController.getMedicines);
 
+// get top rated medicine
+router.get("/medicines/top-rated", medicineController.getTopRatedMedicines);
+
 // get seller medicine
 router.get(
   "/seller/medicines",
