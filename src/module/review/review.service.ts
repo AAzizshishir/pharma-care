@@ -68,7 +68,6 @@ const getCustomerReview = async (customerId: string) => {
 
 // get medicine review
 const getMedicineReviews = async (medicineId: string) => {
-  console.log("from review service", medicineId);
   const result = await prisma.review.findMany({
     where: { medicineId },
     include: {

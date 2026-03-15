@@ -7,15 +7,6 @@ const addToCart = catchAsync(async (req: Request, res: Response) => {
   const medicineId = req.params.id;
   const { quantity } = req.body;
 
-  console.log(
-    "userId:",
-    userId,
-    "medicineId:",
-    medicineId,
-    "quantity:",
-    quantity,
-  );
-
   const result = await cartService.addToCart(
     userId as string,
     medicineId as string,

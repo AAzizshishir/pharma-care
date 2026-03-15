@@ -18,7 +18,6 @@ type QueryParams = {
 
 // get medicines
 const getMedicines = async (query: QueryParams) => {
-  console.log(query);
   // step 1: pagination
   const page = Number(query.page) || 1;
   const limit = Number(query.limit) || 10;
@@ -73,13 +72,9 @@ const getTopRatedMedicines = async () => {
     take: 6,
   });
 
-  console.log(medicineWithRating, "average ratings");
-
   const medicines = await prisma.medicine.findMany({
     where: { id: { in: medicineWithRating.map((m) => m.medicineId) } },
   });
-
-  console.log(medicines, "review with medicine details");
 
   const result = medicines.map((med) => {
     const ratingInfo = medicineWithRating.find((r) => r.medicineId === med.id);
@@ -88,7 +83,6 @@ const getTopRatedMedicines = async () => {
       averageRating: ratingInfo?._avg.rating ?? 0,
     };
   });
-  console.log(result, "medicine with average rating");
   return result;
 };
 

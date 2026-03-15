@@ -79,8 +79,6 @@ const updateMedicine = catchAsync(async (req: Request, res: Response) => {
 const deleteMedicine = catchAsync(async (req: Request, res: Response) => {
   const medicineId = req.params.id;
   const sellerId = req.user?.id;
-  console.log("cookies: from delete medicine", req.headers.cookie);
-  console.log("headers: from delete medicine", req.headers);
   const result = await medicineService.deleteMedicine(
     medicineId as string,
     sellerId as string,

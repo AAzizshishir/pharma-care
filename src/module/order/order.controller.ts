@@ -8,7 +8,6 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
     throw new Error("Customer ID is required");
   }
   const { items, shippingAddress } = req.body;
-  console.log(customerId, req.body);
   const result = await orderService.createOrder({
     customerId,
     shippingAddress,
@@ -24,7 +23,6 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 // get user orders
 const getUserOrders = catchAsync(async (req: Request, res: Response) => {
   const customerId = req.user?.id;
-  console.log(customerId);
   const result = await orderService.getUserOrders(customerId as string);
   res.status(200).json({
     success: true,
@@ -37,7 +35,6 @@ const getUserOrders = catchAsync(async (req: Request, res: Response) => {
 const getUserOrderById = catchAsync(async (req: Request, res: Response) => {
   const customerId = req.user?.id;
   const orderId = req.params.id;
-  console.log(customerId);
   const result = await orderService.getUserOrderById(
     customerId as string,
     orderId as string,
@@ -52,7 +49,6 @@ const getUserOrderById = catchAsync(async (req: Request, res: Response) => {
 // get seller orders
 const getSellerOrders = catchAsync(async (req: Request, res: Response) => {
   const sellerId = req.user?.id;
-  console.log(sellerId);
   const result = await orderService.getSellerOrders(sellerId as string);
   res.status(200).json({
     success: true,

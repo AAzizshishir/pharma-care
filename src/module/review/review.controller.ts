@@ -27,7 +27,6 @@ const getCustomerReview = catchAsync(async (req: Request, res: Response) => {
 // Get Medicine Reviews
 const getMedicineReviews = catchAsync(async (req: Request, res: Response) => {
   const medicineId = req.params.id;
-  console.log("from controller", medicineId);
   const result = await reviewService.getMedicineReviews(medicineId as string);
   res.status(200).json({
     success: true,
